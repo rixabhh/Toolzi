@@ -1,0 +1,5 @@
+import { useEffect, useState } from "react";
+import { NeuButton } from "../../components/common/NeuButton";
+import { OutputPanel } from "../../components/common/OutputPanel";
+
+export function PomodoroTimer() { const [seconds, setSeconds] = useState(25 * 60); const [running, setRunning] = useState(false); useEffect(() => { if (!running) return; const id = setInterval(() => setSeconds((s) => Math.max(0, s - 1)), 1000); return () => clearInterval(id); }, [running]); const mm = String(Math.floor(seconds / 60)).padStart(2, "0"), ss = String(seconds % 60).padStart(2, "0"); return <div className="tool-layout"><section className="tool-panel neu-card"><h2>Pomodoro timer</h2><div className="button-row"><NeuButton onClick={() => setRunning(!running)}>{running ? "Pause" : "Start"}</NeuButton><NeuButton variant="ghost" onClick={() => { setRunning(false); setSeconds(25 * 60); }}>Focus 25</NeuButton><NeuButton variant="ghost" onClick={() => { setRunning(false); setSeconds(5 * 60); }}>Break 5</NeuButton></div></section><OutputPanel title="Time"><div className="stat"><strong>{mm}:{ss}</strong><span>{running ? "Running" : "Paused"}</span></div></OutputPanel></div>; }

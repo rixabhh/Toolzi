@@ -1,0 +1,4 @@
+import { useMemo, useState } from "react";
+import { OutputPanel } from "../../components/common/OutputPanel";
+
+export function BMICalculator() { const [kg, setKg] = useState(70); const [cm, setCm] = useState(170); const bmi = useMemo(() => kg / ((cm / 100) ** 2), [cm, kg]); const label = bmi < 18.5 ? "Underweight" : bmi < 25 ? "Normal" : bmi < 30 ? "Overweight" : "Obese"; return <div className="tool-layout"><section className="tool-panel neu-card"><h2>Calculate BMI</h2><div className="field-grid"><label className="field">Weight kg<input className="tool-input" type="number" value={kg} onChange={(e) => setKg(Number(e.target.value))} /></label><label className="field">Height cm<input className="tool-input" type="number" value={cm} onChange={(e) => setCm(Number(e.target.value))} /></label></div></section><OutputPanel title="BMI"><div className="stat"><strong>{bmi.toFixed(1)}</strong><span>{label}</span></div></OutputPanel></div>; }

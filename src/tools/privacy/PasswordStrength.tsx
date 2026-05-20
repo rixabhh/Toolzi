@@ -1,0 +1,4 @@
+import { useMemo, useState } from "react";
+import { OutputPanel } from "../../components/common/OutputPanel";
+
+export function PasswordStrength() { const [password, setPassword] = useState(""); const score = useMemo(() => [password.length >= 12, /[A-Z]/.test(password), /[a-z]/.test(password), /\d/.test(password), /[^A-Za-z0-9]/.test(password), password.length >= 18].filter(Boolean).length, [password]); const label = score >= 5 ? "Strong" : score >= 3 ? "Okay" : "Weak"; return <div className="tool-layout"><section className="tool-panel neu-card"><h2>Check password strength</h2><input className="tool-input" type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Type a password..." /><p className="muted">Checked locally only.</p></section><OutputPanel title="Strength"><div className="stat"><strong>{label}</strong><span>{score}/6 checks passed</span></div></OutputPanel></div>; }

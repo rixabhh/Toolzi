@@ -1,0 +1,4 @@
+import { useMemo, useState } from "react";
+import { OutputPanel } from "../../components/common/OutputPanel";
+
+export function DiffChecker() { const [a, setA] = useState("Toolzi is local"); const [b, setB] = useState("Toolzi is private"); const diff = useMemo(() => { const left = a.split(/\r?\n/), right = b.split(/\r?\n/); const max = Math.max(left.length, right.length); return Array.from({ length: max }, (_, i) => left[i] === right[i] ? `  ${left[i] ?? ""}` : `- ${left[i] ?? ""}\n+ ${right[i] ?? ""}`).join("\n"); }, [a, b]); return <div className="tool-layout"><section className="tool-panel neu-card"><h2>Compare text</h2><div className="field-grid"><textarea className="tool-textarea" value={a} onChange={(e) => setA(e.target.value)} /><textarea className="tool-textarea" value={b} onChange={(e) => setB(e.target.value)} /></div></section><OutputPanel title="Diff"><textarea className="tool-textarea" readOnly value={diff} /></OutputPanel></div>; }

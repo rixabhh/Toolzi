@@ -1,0 +1,32 @@
+@media print {
+  body {
+    background: white;
+  }
+
+  .site-header,
+  .site-footer,
+  .breadcrumb,
+  .tool-hero,
+  .tool-panel,
+  .section-block,
+  .button-row,
+  .no-print {
+    display: none !important;
+  }
+
+  .app {
+    width: 100%;
+    margin: 0;
+  }
+
+  .output-panel,
+  .preview-box,
+  .markdown-preview,
+  .invoice-preview {
+    box-shadow: none !important;
+    border-radius: 0;
+    max-height: none;
+    padding: 0;
+    background: white;
+  }
+}

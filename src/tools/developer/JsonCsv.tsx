@@ -1,0 +1,8 @@
+import { useMemo, useState } from "react";
+import { NeuButton } from "../../components/common/NeuButton";
+import { OutputPanel } from "../../components/common/OutputPanel";
+import { copyText } from "../../lib/downloads";
+
+const csvToJson = (csv: string) => { const [head = "", ...rows] = csv.trim().split(/\r?\n/); const keys = head.split(",").map((x) => x.trim()); return JSON.stringify(rows.map((row) => Object.fromEntries(row.split(",").map((v, i) => [keys[i], v.trim()]))), null, 2); };
+const jsonToCsv = (json: string) => { const arr = JSON.parse(json); const keys = Object.keys(arr[0] ?? {}); return [keys.join(","), ...arr.map((o: Record<string, unknown>) => keys.map((k) => JSON.stringify(o[k] ?? "")).join(","))].join("\n"); };
+export function JsonCsv() { const [mode, setMode] = useState("json-csv"); const [input, setInput] = useState('[{"name":"Toolzi","local":true}]'); const output = useMemo(() => { try { return mode === "json-csv" ? jsonToCsv(input) : csvToJson(input); } catch { return "Could not convert that data."; } }, [input, mode]); return <div className="tool-layout"><section className="tool-panel neu-card"><h2>JSON / CSV</h2><label className="field">Mode<select className="tool-select" value={mode} onChange={(e) => setMode(e.target.value)}><option value="json-csv">JSON to CSV</option><option value="csv-json">CSV to JSON</option></select></label><textarea className="tool-textarea" value={input} onChange={(e) => setInput(e.target.value)} /></section><OutputPanel title="Converted output"><textarea className="tool-textarea" readOnly value={output} /><div className="button-row"><NeuButton onClick={() => copyText(output)}>Copy output</NeuButton></div></OutputPanel></div>; }
