@@ -1,5 +1,7 @@
 name: Deploy to Cloudflare Workers
 
+# Manual trigger is enabled so this deployment can be started from Actions.
+# This workflow builds the app, runs tests, and deploys static assets via Wrangler.
 on:
   push:
     branches:
@@ -19,6 +21,14 @@ jobs:
       deployments: write
 
     steps:
+      - name: Workflow overview
+        run: |
+          echo "=== Toolzi Cloudflare deploy ==="
+          echo "Branch: $GITHUB_REF"
+          echo "Workflow: $GITHUB_WORKFLOW"
+          echo "Run number: $GITHUB_RUN_NUMBER"
+          echo "Repository: $GITHUB_REPOSITORY"
+
       - name: Checkout repository
         uses: actions/checkout@v4
 
