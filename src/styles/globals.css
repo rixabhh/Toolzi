@@ -273,14 +273,49 @@ p {
   font-size: 0.95rem;
 }
 
+.creator-credit,
 .creator-link {
+  display: inline-flex;
+  align-items: center;
+}
+
+.creator-credit {
+  gap: 7px;
+  color: var(--text-muted);
+}
+
+.creator-link {
+  gap: 6px;
+  min-height: 34px;
+  padding: 7px 11px;
+  border-radius: 999px;
   color: var(--text-main);
+  background: var(--surface);
+  box-shadow: var(--inset-soft-shadow);
   font-weight: 800;
+  line-height: 1;
 }
 
 .creator-link:hover {
-  text-decoration: underline;
-  text-underline-offset: 4px;
+  box-shadow: var(--soft-shadow);
+}
+
+.heart-icon,
+.github-icon {
+  flex: 0 0 auto;
+  display: block;
+}
+
+.heart-icon {
+  width: 16px;
+  height: 16px;
+  fill: #e23a3a;
+}
+
+.github-icon {
+  width: 17px;
+  height: 17px;
+  fill: currentColor;
 }
 
 .wordmark {
@@ -373,6 +408,16 @@ p {
   justify-content: flex-end;
   gap: 12px;
   flex-wrap: wrap;
+  order: 2;
+  margin-left: auto;
+}
+
+.header-controls {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  order: 3;
 }
 
 .mobile-menu-button,
@@ -1490,6 +1535,8 @@ p {
   }
 
   .wordmark {
+    grid-column: 1;
+    grid-row: 1;
     gap: 8px;
     min-width: 0;
     font-size: 0.98rem;
@@ -1512,13 +1559,45 @@ p {
     gap: 4px;
     width: 38px;
     height: 38px;
-    margin-left: auto;
+    margin-left: 0;
     border: 0;
     border-radius: 14px;
     background: var(--surface);
     color: var(--text-main);
     box-shadow: var(--soft-shadow);
     cursor: pointer;
+  }
+
+  .header-controls {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: end;
+    order: 1;
+    gap: 8px;
+  }
+
+  .header-controls .theme-toggle {
+    width: 38px;
+    min-width: 38px;
+    height: 38px;
+    min-height: 38px;
+    justify-content: center;
+    gap: 0;
+    padding: 0;
+    border-radius: 14px;
+    font-size: 0.84rem;
+  }
+
+  .header-controls .theme-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
   }
 
   .mobile-menu-button span {
@@ -1553,6 +1632,8 @@ p {
   .header-actions {
     position: static;
     grid-column: 1 / -1;
+    order: 2;
+    margin-left: 0;
     display: grid;
     grid-template-rows: auto auto auto;
     align-items: stretch;
@@ -1637,17 +1718,6 @@ p {
     border-radius: 14px;
     font-size: 0.88rem;
     text-align: center;
-  }
-
-  .theme-toggle {
-    align-self: end;
-    width: 100%;
-    justify-content: center;
-    min-height: 40px;
-    margin-top: 10px;
-    border-radius: 16px;
-    padding: 9px 12px;
-    font-size: 0.86rem;
   }
 
   .home-page,

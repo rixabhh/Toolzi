@@ -29,18 +29,29 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <Link to="/" className="wordmark" aria-label="Toolzi home">
           <LogoLockup />
         </Link>
-        <button
-          className="mobile-menu-button"
-          type="button"
-          aria-label={menuOpen ? "Close menu" : "Open menu"}
-          aria-expanded={menuOpen}
-          aria-controls="site-menu"
-          onClick={() => setMenuOpen((open) => !open)}
-        >
-          <span aria-hidden="true" />
-          <span aria-hidden="true" />
-          <span aria-hidden="true" />
-        </button>
+        <div className="header-controls">
+          <button
+            className="theme-toggle"
+            type="button"
+            aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+            onClick={() => setTheme((current) => (current === "dark" ? "light" : "dark"))}
+          >
+            <span aria-hidden="true">{theme === "dark" ? "L" : "D"}</span>
+            <span className="theme-label">{theme === "dark" ? "Light" : "Dark"}</span>
+          </button>
+          <button
+            className="mobile-menu-button"
+            type="button"
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={menuOpen}
+            aria-controls="site-menu"
+            onClick={() => setMenuOpen((open) => !open)}
+          >
+            <span aria-hidden="true" />
+            <span aria-hidden="true" />
+            <span aria-hidden="true" />
+          </button>
+        </div>
         <button className="nav-scrim" type="button" aria-label="Dismiss menu" onClick={() => setMenuOpen(false)} />
         <div className="header-actions" id="site-menu">
           <div className="mobile-menu-head">
@@ -60,24 +71,25 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <a href="/#Developer">Developer</a>
             <a href="/#Privacy">Privacy</a>
           </nav>
-          <button
-            className="theme-toggle"
-            type="button"
-            aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
-            onClick={() => setTheme((current) => (current === "dark" ? "light" : "dark"))}
-          >
-            <span aria-hidden="true">{theme === "dark" ? "L" : "D"}</span>
-            <span>{theme === "dark" ? "Light" : "Dark"}</span>
-          </button>
         </div>
       </header>
       <main>{children}</main>
       <footer className="site-footer">
         <span>Toolzi runs tools in your browser.</span>
         <span>No upload. No sign-up. Just get it done.</span>
-        <a className="creator-link" href="https://github.com/rixabhh" target="_blank" rel="noreferrer">
-          Built by rixabhh
-        </a>
+        <span className="creator-credit">
+          Built with
+          <svg className="heart-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 21s-7.2-4.7-9.5-9.1C0.8 8.7 2.5 5 6.1 5c2 0 3.4 1.1 4.2 2.4C11.1 6.1 12.7 5 14.7 5c3.6 0 5.3 3.7 3.6 6.9C16 16.3 12 21 12 21Z" />
+          </svg>
+          by
+          <a className="creator-link" href="https://github.com/rixabhh" target="_blank" rel="noreferrer">
+            <svg className="github-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 2C6.5 2 2 6.6 2 12.2c0 4.5 2.9 8.3 6.9 9.7.5.1.7-.2.7-.5v-1.8c-2.8.6-3.4-1.2-3.4-1.2-.5-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 0 1.6 1.1 1.6 1.1.9 1.6 2.4 1.1 2.9.9.1-.7.4-1.1.7-1.4-2.2-.3-4.6-1.1-4.6-5 0-1.1.4-2 1-2.8-.1-.3-.4-1.3.1-2.7 0 0 .8-.3 2.8 1 .8-.2 1.6-.3 2.4-.3.8 0 1.6.1 2.4.3 1.9-1.3 2.8-1 2.8-1 .5 1.4.2 2.4.1 2.7.6.7 1 1.7 1 2.8 0 3.9-2.4 4.8-4.6 5 .4.3.7.9.7 1.8v2.7c0 .3.2.6.7.5 4-1.4 6.8-5.2 6.8-9.7C22 6.6 17.5 2 12 2Z" />
+            </svg>
+            rixabhh
+          </a>
+        </span>
       </footer>
     </div>
   );
