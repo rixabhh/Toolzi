@@ -1452,13 +1452,13 @@ p {
 @media (max-width: 760px) {
   :root {
     --page-pad: 12px;
-    --card-pad: 20px;
-    --radius-xl: 22px;
-    --radius-lg: 18px;
+    --card-pad: 18px;
+    --radius-xl: 20px;
+    --radius-lg: 16px;
   }
 
   body.nav-open {
-    overflow: hidden;
+    overflow: auto;
   }
 
   .app {
@@ -1469,13 +1469,14 @@ p {
   .site-header {
     position: sticky;
     top: 0;
-    z-index: 20;
-    display: flex;
+    z-index: 40;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
     width: calc(100% + 24px);
     margin: 0 -12px;
-    padding: 10px 12px 12px;
-    background: color-mix(in srgb, var(--bg) 90%, transparent);
+    padding: 9px 12px 10px;
+    background: color-mix(in srgb, var(--bg) 94%, transparent);
     backdrop-filter: blur(14px);
   }
 
@@ -1486,22 +1487,22 @@ p {
   }
 
   .logo-mark {
-    width: 42px;
-    height: 42px;
-    border-radius: 15px;
+    width: 40px;
+    height: 40px;
+    border-radius: 14px;
   }
 
   .logo-mark svg {
-    width: 27px;
-    height: 27px;
+    width: 25px;
+    height: 25px;
   }
 
   .mobile-menu-button {
     display: inline-grid;
     place-items: center;
     gap: 4px;
-    width: 44px;
-    height: 44px;
+    width: 42px;
+    height: 42px;
     margin-left: auto;
     border: 0;
     border-radius: 16px;
@@ -1533,43 +1534,46 @@ p {
   }
 
   .nav-scrim {
-    position: fixed;
-    inset: 0;
-    z-index: 21;
-    display: block;
-    border: 0;
-    background: rgba(0, 0, 0, 0.34);
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 180ms ease;
+    display: none;
   }
 
   .mobile-menu-open .nav-scrim {
-    opacity: 1;
-    pointer-events: auto;
+    display: none;
   }
 
   .header-actions {
-    position: fixed;
-    top: 12px;
-    right: 12px;
-    bottom: 12px;
-    z-index: 22;
+    position: static;
+    grid-column: 1 / -1;
     display: grid;
-    grid-template-rows: auto 1fr auto;
+    grid-template-rows: auto auto auto;
     align-items: stretch;
     justify-content: stretch;
-    width: min(310px, calc(100vw - 32px));
-    padding: 16px;
-    border-radius: 24px;
+    width: auto;
+    max-height: 0;
+    margin-top: 0;
+    padding: 0 12px;
+    overflow: auto;
+    border-radius: 20px;
     background: var(--surface);
-    box-shadow: var(--deep-shadow);
-    transform: translateX(calc(100% + 28px));
-    transition: transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+    box-shadow: none;
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+    transform: translateY(-6px);
+    transform-origin: top center;
+    transition: max-height 220ms ease, margin 180ms ease, padding 180ms ease, opacity 160ms ease, transform 180ms ease, visibility 0ms linear 220ms;
   }
 
   .mobile-menu-open .header-actions {
-    transform: translateX(0);
+    max-height: 320px;
+    margin-top: 10px;
+    padding: 12px;
+    box-shadow: var(--outer-shadow);
+    opacity: 1;
+    pointer-events: auto;
+    visibility: visible;
+    transform: translateY(0);
+    transition-delay: 0ms;
   }
 
   .mobile-menu-head {
@@ -1577,9 +1581,9 @@ p {
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    margin-bottom: 14px;
+    margin-bottom: 10px;
     color: var(--text-muted);
-    font-size: 0.82rem;
+    font-size: 0.76rem;
     font-weight: 900;
     text-transform: uppercase;
     letter-spacing: 0.08em;
@@ -1588,15 +1592,15 @@ p {
   .mobile-menu-head button {
     display: inline-grid;
     place-items: center;
-    width: 38px;
-    height: 38px;
+    width: 34px;
+    height: 34px;
     border: 0;
     border-radius: 14px;
     background: var(--surface);
     color: var(--text-main);
     box-shadow: var(--soft-shadow);
     cursor: pointer;
-    font-size: 1.15rem;
+    font-size: 1rem;
     font-weight: 900;
     line-height: 1;
   }
@@ -1606,7 +1610,7 @@ p {
     align-self: stretch;
     align-content: start;
     grid-auto-rows: min-content;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     justify-items: stretch;
     width: 100%;
     gap: 8px;
@@ -1619,26 +1623,40 @@ p {
     align-items: center;
     width: 100%;
     min-height: 44px;
-    padding: 11px 13px;
-    border-radius: 15px;
-    font-size: 0.96rem;
+    justify-content: center;
+    padding: 10px 8px;
+    border-radius: 14px;
+    font-size: 0.88rem;
+    text-align: center;
   }
 
   .theme-toggle {
     align-self: end;
     width: 100%;
     justify-content: center;
-    margin-top: 16px;
+    min-height: 40px;
+    margin-top: 10px;
     border-radius: 16px;
+    padding: 9px 12px;
+    font-size: 0.86rem;
+  }
+
+  .home-page,
+  .tool-page,
+  .tools-index {
+    gap: 28px;
+    padding-bottom: 42px;
   }
 
   .search-section {
-    padding: 20px 16px;
+    padding: 18px 16px;
+    border-radius: 20px;
   }
 
   .search-section label {
-    margin-bottom: 14px;
-    font-size: 1.32rem;
+    margin-bottom: 12px;
+    font-size: 1.26rem;
+    line-height: 1.18;
   }
 
   .search-box input,
@@ -1647,7 +1665,7 @@ p {
   .tool-select {
     min-height: 48px;
     border-radius: 16px;
-    padding: 13px 14px;
+    padding: 12px 14px;
   }
 
   .search-box input {
@@ -1681,16 +1699,16 @@ p {
 
   .hero {
     min-height: auto;
-    gap: 18px;
-    padding: 24px 18px 22px;
-    border-radius: 24px;
+    gap: 14px;
+    padding: 19px 16px 18px;
+    border-radius: 20px;
   }
 
   .hero h1 {
     max-width: 100%;
-    margin-bottom: 16px;
-    font-size: clamp(2.18rem, 10.5vw, 2.95rem);
-    line-height: 1.04;
+    margin-bottom: 13px;
+    font-size: clamp(1.84rem, 8.8vw, 2.35rem);
+    line-height: 1.06;
     text-wrap: pretty;
   }
 
@@ -1708,24 +1726,24 @@ p {
   .hero-copy > p:not(.eyebrow),
   .privacy-line {
     max-width: 100% !important;
-    font-size: 0.98rem;
-    line-height: 1.58;
+    font-size: 0.92rem;
+    line-height: 1.52;
   }
 
   .privacy-line {
-    margin-top: 10px;
-    font-size: 0.96rem !important;
+    margin-top: 9px;
+    font-size: 0.9rem !important;
   }
 
   .badge-row {
-    gap: 9px;
-    margin-top: 14px;
+    gap: 8px;
+    margin-top: 13px;
   }
 
   .badge {
-    min-height: 30px;
-    padding: 7px 10px;
-    font-size: 0.76rem;
+    min-height: 29px;
+    padding: 6px 9px;
+    font-size: 0.72rem;
   }
 
   .hero-stack {
@@ -1735,44 +1753,59 @@ p {
   .section-heading h2,
   .privacy-panel h2,
   .tool-hero h1 {
-    font-size: clamp(1.65rem, 9vw, 2.2rem);
+    font-size: clamp(1.48rem, 7.6vw, 1.95rem);
+  }
+
+  .tools-index-hero {
+    padding: 20px 16px;
+    border-radius: 20px;
+  }
+
+  .tools-index-hero h1 {
+    margin-bottom: 10px;
+    font-size: clamp(1.9rem, 9vw, 2.45rem);
+  }
+
+  .tools-index-hero p:not(.eyebrow) {
+    line-height: 1.52;
   }
 
   .tool-grid {
     grid-template-columns: minmax(0, 1fr);
-    gap: 14px;
+    gap: 12px;
   }
 
   .tool-card {
-    grid-template-columns: 50px minmax(0, 1fr) 38px;
+    grid-template-columns: 46px minmax(0, 1fr) 34px;
     grid-template-rows: auto auto auto;
     align-items: start;
-    gap: 5px 12px;
+    gap: 4px 11px;
     min-height: 0;
-    padding: 16px;
-    border-radius: 20px;
+    padding: 14px;
+    border-radius: 18px;
   }
 
   .tool-card .icon-shell {
     grid-row: 1 / span 3;
-    width: 48px;
-    height: 48px;
-    min-width: 48px;
-    border-radius: 16px;
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    border-radius: 15px;
   }
 
   .tool-card .icon-shell svg {
-    width: 23px;
-    height: 23px;
+    width: 21px;
+    height: 21px;
   }
 
   .tool-card > .favorite-button {
     position: static;
     grid-column: 3;
     grid-row: 1;
-    width: 36px;
-    height: 36px;
-    border-radius: 13px;
+    width: 34px;
+    height: 34px;
+    border-radius: 12px;
+    font-size: 1rem;
   }
 
   .tool-card strong {
@@ -1780,20 +1813,21 @@ p {
     grid-row: 1;
     align-self: center;
     padding-right: 0;
-    font-size: 0.98rem;
+    font-size: 0.94rem;
+    line-height: 1.2;
   }
 
   .tool-card p {
     grid-column: 2 / 4;
     grid-row: 2;
-    font-size: 0.9rem;
-    line-height: 1.42;
+    font-size: 0.84rem;
+    line-height: 1.38;
   }
 
   .tool-card small {
     grid-column: 2 / 4;
     grid-row: 3;
-    font-size: 0.78rem;
+    font-size: 0.72rem;
   }
 
   .section-block {
