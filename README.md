@@ -1,134 +1,80 @@
 # Toolzi
 
 <p align="center">
-  <img src="./public/favicon.svg" width="84" height="84" alt="Toolzi logo" />
+  <img src="./public/favicon.svg" width="92" height="92" alt="Toolzi logo" />
 </p>
 
-<h3 align="center">Tiny tools for everyday stuff.</h3>
+<h3 align="center">Tiny browser tools for everyday stuff.</h3>
 
 <p align="center">
-  Compress images, merge PDFs, make QR codes, clean text, calculate GST, create invoices, and more. Toolzi runs in the browser, so files stay on the user's device.
+  Compress images, merge PDFs, make QR codes, clean text, calculate GST, create invoices, and handle quick browser tasks without uploads or sign-ups.
 </p>
 
-## Overview
+<p align="center">
+  <a href="https://github.com/rixabhh">Built with ❤️ by rixabhh</a>
+</p>
 
-Toolzi is a privacy-first browser utility toolkit built as a React single-page app. It is designed for quick everyday tasks without uploads, accounts, or server-side file processing.
+## What It Does
 
-Core product promise:
+Toolzi is a privacy-first toolkit for small daily tasks. It runs in the browser, keeps files on your device, and gives people quick access to tools that usually sit across multiple websites.
 
-- Files stay local in the browser.
-- No sign-up is required.
-- Tools are fast, searchable, and grouped by task.
-- Notes, todos, favorites, recent tools, and invoice drafts stay in local browser storage.
+## Highlights
+
+| Feature | Why it matters |
+| --- | --- |
+| 🧰 40+ everyday tools | PDFs, images, text, calculators, creators, productivity, developer helpers, and privacy tools. |
+| 🔒 Local-first workflow | Files are processed in the browser. No upload-first flow for core tools. |
+| ⚡ Fast access | Search, categories, favorites, and recent tools help users get to the right action quickly. |
+| 📱 Mobile-friendly UI | Compact controls, cleaner navigation, and phone-first spacing for quick use on small screens. |
+| ⬇️ Installable web app | Supported browsers can install Toolzi as a standalone web app from the header install button. |
+| 🌓 Light and dark modes | A simple icon toggle keeps the interface comfortable in different environments. |
 
 ## Tool Categories
 
-- PDF: merge PDFs, split PDFs, image to PDF, Markdown to PDF.
-- Image: compress, resize, convert, and remove simple solid backgrounds.
-- Text: count words, convert case, and clean copied text.
-- Calculate: GST, percentages, dates, age, BMI, EMI, and units.
-- Create: QR codes, invoices, signatures, favicons, and brat-style memes.
-- Productivity: notes, todos, Pomodoro, stopwatch, and countdown.
-- Developer: JSON, Base64, URLs, UUIDs, regex, colors, gradients, HTML, CSV, and diffs.
-- Privacy: passwords, password strength, and SHA-256 file hashes.
+| Category | Tools |
+| --- | --- |
+| 📄 PDF | Merge PDFs, split PDFs, image to PDF, Markdown to PDF. |
+| 🖼️ Image | Compress, resize, convert, and remove simple solid backgrounds. |
+| ✍️ Text | Count words, convert case, clean copied text. |
+| 🧮 Calculate | GST, percentages, dates, age, BMI, EMI, and units. |
+| 🎨 Create | QR codes, invoices, signatures, favicons, and meme-style images. |
+| ✅ Productivity | Notes, todos, Pomodoro, stopwatch, and countdown. |
+| 🧑‍💻 Developer | JSON, Base64, URLs, UUIDs, regex, colors, gradients, HTML, CSV, and diffs. |
+| 🛡️ Privacy | Password generator, password strength, and SHA-256 file hashes. |
 
-## Tech Stack
+## Install As An App
 
-- React, Vite, TypeScript
+Toolzi includes a web app manifest, app icons, and a service worker. On supported browsers, an install button appears in the header so users can add Toolzi to their phone or desktop and open it like a regular app.
+
+Browser support varies. If the install button is not shown, users can still use the browser's "Add to Home Screen" or install option when available.
+
+## Privacy
+
+Toolzi is designed around local browser processing. Files are read through browser APIs and outputs are generated on the device. Notes, todos, favorites, recent tools, and drafts stay in local browser storage.
+
+## Built With
+
+- React
+- Vite
+- TypeScript
 - React Router
-- Tailwind CSS plus custom neumorphic design tokens
-- pdf-lib for browser PDF work
-- qrcode for QR generation
-- browser-image-compression and Canvas APIs for image tools
-- localStorage for local-only user data
-- Cloudflare Workers Static Assets for deployment
+- Tailwind CSS and custom UI styles
+- Browser APIs for local file work
 
-## Local Development
+## Run Locally
 
 ```bash
 npm install
 npm run dev
 ```
 
-Vite will print the local URL, usually `http://localhost:5173`.
-
-## Quality Checks
+## Check The Build
 
 ```bash
 npm test
 npm run build
 ```
 
-`npm run build` runs TypeScript and creates the production assets in `dist/`.
+## Creator
 
-## Cloudflare Workers Deployment
-
-Toolzi uses Workers Static Assets through `wrangler.json`:
-
-```json
-{
-  "name": "toolzi",
-  "compatibility_date": "2026-05-20",
-  "assets": {
-    "directory": "./dist",
-    "not_found_handling": "single-page-application"
-  }
-}
-```
-
-### Manual Deploy
-
-1. Install dependencies:
-
-```bash
-npm install
-```
-
-2. Authenticate Wrangler:
-
-```bash
-npx wrangler login
-```
-
-3. Build and deploy:
-
-```bash
-npm run deploy
-```
-
-### GitHub Actions Deploy
-
-The workflow at `.github/workflows/deploy-cloudflare-workers.yml` deploys on pushes to `main` and can also be run manually.
-
-Add these repository secrets in GitHub:
-
-- `CLOUDFLARE_API_TOKEN`
-- `CLOUDFLARE_ACCOUNT_ID`
-
-Recommended token permissions:
-
-- Account: Workers Scripts Edit
-- Account: Workers Builds Edit, if enabled on the account
-- Zone: Workers Routes Edit, only if using custom routes
-
-The workflow runs:
-
-```bash
-npm ci
-npm test
-npm run build
-wrangler deploy
-```
-
-## Deployment Notes
-
-- SPA fallback is handled by `not_found_handling: "single-page-application"`.
-- The deployed Worker serves static assets from `dist/`.
-- Core tools do not call a file-processing backend.
-- Do not commit `.env`, `.dev.vars`, `dist`, `.wrangler`, build logs, TypeScript build info, or PRD/planning documents.
-
-## Privacy Model
-
-Toolzi is built around local browser processing. Uploaded files are read through browser APIs such as `File`, `Blob`, `arrayBuffer`, object URLs, and Canvas. Generated outputs are downloaded as local browser-created files.
-
-No MVP tool should upload file contents, notes, todos, invoice data, or generated content to a backend.
+Toolzi is built and maintained by [rixabhh](https://github.com/rixabhh).

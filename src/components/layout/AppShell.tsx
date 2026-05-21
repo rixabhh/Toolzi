@@ -3,9 +3,16 @@ import { Link, NavLink, useLocation } from "react-router-dom";
 import { BackgroundDecor } from "./BackgroundDecor";
 import { LogoLockup } from "../common/Logo";
 
+type BeforeInstallPromptEvent = Event & {
+  prompt: () => Promise<void>;
+  userChoice: Promise<{ outcome: "accepted" | "dismissed"; platform: string }>;
+};
+
 export function AppShell({ children }: { children: React.ReactNode }) {
   const [theme, setTheme] = useState(() => localStorage.getItem("toolzi:theme") ?? "light");
   const [menuOpen, setMenuOpen] = useState(false);
+  const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
+  const [appInstalled, setAppInstalled] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
@@ -22,6 +29,37 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     return () => document.body.classList.remove("nav-open");
   }, [menuOpen]);
 
+  useEffect(() => {
+    const onBeforeInstallPrompt = (event: Event) => {
+      event.preventDefault();
+      setInstallPrompt(event as BeforeInstallPromptEvent);
+    };
+    const onAppInstalled = () => {
+      setAppInstalled(true);
+      setInstallPrompt(null);
+    };
+
+    window.addEventListener("beforeinstallprompt", onBeforeInstallPrompt);
+    window.addEventListener("appinstalled", onAppInstalled);
+
+    return () => {
+      window.removeEventListener("beforeinstallprompt", onBeforeInstallPrompt);
+      window.removeEventListener("appinstalled", onAppInstalled);
+    };
+  }, []);
+
+  const installApp = async () => {
+    if (!installPrompt) return;
+
+    await installPrompt.prompt();
+    const choice = await installPrompt.userChoice;
+    if (choice.outcome === "accepted" || choice.outcome === "dismissed") {
+      setInstallPrompt(null);
+    }
+  };
+
+  const canInstall = Boolean(installPrompt && !appInstalled);
+
   return (
     <div className="app">
       <BackgroundDecor />
@@ -30,6 +68,16 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <LogoLockup />
         </Link>
         <div className="header-controls">
+          {canInstall && (
+            <button className="install-button" type="button" aria-label="Install Toolzi app" onClick={installApp}>
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 3v10" />
+                <path d="m8 9 4 4 4-4" />
+                <path d="M5 15v3.5A2.5 2.5 0 0 0 7.5 21h9a2.5 2.5 0 0 0 2.5-2.5V15" />
+              </svg>
+              <span>Install app</span>
+            </button>
+          )}
           <button
             className="theme-toggle"
             type="button"
