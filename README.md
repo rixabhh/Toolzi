@@ -14,6 +14,10 @@
   <a href="https://github.com/rixabhh">Built with ❤️ by rixabhh</a>
 </p>
 
+<p align="center">
+  <a href="https://toolzi.rixxabh.workers.dev">Open Toolzi live</a>
+</p>
+
 ## What It Does
 
 Toolzi is a privacy-first toolkit for small daily tasks. It runs in the browser, keeps files on your device, and gives people quick access to tools that usually sit across multiple websites.
