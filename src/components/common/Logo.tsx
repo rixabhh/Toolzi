@@ -17,7 +17,7 @@ export function LogoLockup() {
   return (
     <>
       <LogoMark />
-      <span>toolzi</span>
+      <span className="wordmark-title">Toolzi</span>
     </>
   );
 }

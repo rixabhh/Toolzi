@@ -36,7 +36,18 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
             onClick={() => setTheme((current) => (current === "dark" ? "light" : "dark"))}
           >
-            <span aria-hidden="true">{theme === "dark" ? "L" : "D"}</span>
+            <span className="theme-icon" aria-hidden="true">
+              {theme === "dark" ? (
+                <svg viewBox="0 0 24 24">
+                  <circle cx="12" cy="12" r="4" />
+                  <path d="M12 2v2.2M12 19.8V22M4.9 4.9l1.6 1.6M17.5 17.5l1.6 1.6M2 12h2.2M19.8 12H22M4.9 19.1l1.6-1.6M17.5 6.5l1.6-1.6" />
+                </svg>
+              ) : (
+                <svg viewBox="0 0 24 24">
+                  <path d="M20.2 14.4A7.6 7.6 0 0 1 9.6 3.8 8.3 8.3 0 1 0 20.2 14.4Z" />
+                </svg>
+              )}
+            </span>
             <span className="theme-label">{theme === "dark" ? "Light" : "Dark"}</span>
           </button>
           <button
