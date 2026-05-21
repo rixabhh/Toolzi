@@ -75,6 +75,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <footer className="site-footer">
         <span>Toolzi runs tools in your browser.</span>
         <span>No upload. No sign-up. Just get it done.</span>
+        <a className="creator-link" href="https://github.com/rixabhh" target="_blank" rel="noreferrer">
+          Built by rixabhh
+        </a>
       </footer>
     </div>
   );

@@ -273,6 +273,16 @@ p {
   font-size: 0.95rem;
 }
 
+.creator-link {
+  color: var(--text-main);
+  font-weight: 800;
+}
+
+.creator-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
 .wordmark {
   display: inline-flex;
   align-items: center;
