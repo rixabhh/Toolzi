@@ -2,6 +2,7 @@ import { lazy, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { getToolById } from "../tools/registry";
 import { ToolShell } from "../components/tools/ToolShell";
+import { setSeo } from "../lib/seo";
 
 const MarkdownToPDF = lazy(() => import("../tools/pdf/MarkdownToPDF").then((m) => ({ default: m.MarkdownToPDF })));
 const MergePDF = lazy(() => import("../tools/pdf/MergePDF").then((m) => ({ default: m.MergePDF })));
@@ -93,9 +94,17 @@ export function ToolRoute() {
   const Component = toolViews[toolId];
 
   useEffect(() => {
-    if (tool) document.title = `${tool.name} - Toolzi`;
+    if (tool) {
+      setSeo({
+        title: `${tool.name} - Free local ${tool.category.toLowerCase()} tool | Toolzi`,
+        description: `${tool.description} Runs locally in your browser so your files and data stay on your device.`,
+        path: tool.route,
+        keywords: [...tool.keywords, ...tool.aliases, "Toolzi", "local browser tool", "privacy-first tool"]
+      });
+    }
+
     return () => {
-      document.title = "Toolzi - Tiny browser tools for everyday stuff";
+      setSeo();
     };
   }, [tool]);
 

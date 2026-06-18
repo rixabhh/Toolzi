@@ -65,7 +65,7 @@ export function HomePage() {
         <div className="hero-copy">
           <p className="eyebrow">Toolzi</p>
           <TypewriterHeadline />
-          <p>Compress images, merge PDFs, make QR codes, and more — right in your browser.</p>
+          <p>Compress images, merge PDFs, make QR codes, and more, right in your browser.</p>
           <div className="badge-row">
             <Badge icon="check">Runs in your browser</Badge>
             <Badge icon="check">No uploads</Badge>
