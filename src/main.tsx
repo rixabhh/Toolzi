@@ -3,9 +3,11 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import App from './app/App';
 import { initializeClarity } from './lib/clarity';
+import { initializeSentry } from './lib/sentry';
 import './styles/globals.css';
 import './styles/print.css';
 
+initializeSentry();
 initializeClarity();
 
 ReactDOM.createRoot(document.getElementById('root')!).render(

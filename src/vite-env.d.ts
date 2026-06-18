@@ -2,6 +2,7 @@
 
 interface ImportMetaEnv {
   readonly VITE_CLARITY_PROJECT_ID?: string;
+  readonly VITE_SENTRY_DSN?: string;
 }
 
 interface ImportMeta {
