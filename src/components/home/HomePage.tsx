@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { categories, categoryCopy, tools } from "../../tools/registry";
 import { useFavorites } from "../../hooks/useFavorites";
 import { Badge } from "../common/Badge";
-import { ToolIcon } from "../common/ToolIcon";
 import { PredictiveSearch } from "./PredictiveSearch";
 import { ToolCard } from "./ToolCard";
 
@@ -66,22 +65,12 @@ export function HomePage() {
         <div className="hero-copy">
           <p className="eyebrow">Toolzi</p>
           <TypewriterHeadline />
-          <p>
-            Compress images, merge PDFs, make QR codes, clean text, calculate GST, and turn Markdown into PDFs all right in
-            your browser.
-          </p>
-          <p className="privacy-line">Your files stay with you. No upload. No sign-up. Just get it done.</p>
+          <p>Compress images, merge PDFs, make QR codes, and more — right in your browser.</p>
           <div className="badge-row">
-            <Badge>Runs in your browser</Badge>
-            <Badge>No file uploads</Badge>
-            <Badge>No sign-up</Badge>
-            <Badge>Free to use</Badge>
+            <Badge icon="check">Runs in your browser</Badge>
+            <Badge icon="check">No uploads</Badge>
+            <Badge icon="check">Free forever</Badge>
           </div>
-        </div>
-        <div className="hero-stack" aria-hidden="true">
-          <div className="mini-card"><ToolIcon name="merge" category="PDF" /></div>
-          <div className="mini-card"><ToolIcon name="compress" category="Image" /></div>
-          <div className="mini-card"><ToolIcon name="qr" category="Create" /></div>
         </div>
       </section>
 

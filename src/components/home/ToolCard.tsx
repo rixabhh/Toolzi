@@ -25,7 +25,7 @@ export function ToolCard({ tool }: { tool: Tool }) {
       <ToolIcon name={tool.icon} category={tool.category} />
       <strong>{tool.name}</strong>
       <p>{tool.description}</p>
-      <small>{tool.category} / Runs locally</small>
+      <small className="tool-card-tag">{tool.category}</small>
     </Link>
   );
 }

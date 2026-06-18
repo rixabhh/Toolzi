@@ -13,7 +13,7 @@ export function PredictiveSearch() {
   const results = useMemo(() => searchTools(query, tools, recent), [query, recent.join("|")]);
 
   return (
-    <section className="search-section neu-card">
+    <section className="search-section">
       <label htmlFor="tool-search">What do you need to do?</label>
       <div className="search-box">
         <input
@@ -38,7 +38,6 @@ export function PredictiveSearch() {
           }}
         />
       </div>
-      <p className="helper">Search runs locally and understands casual phrases.</p>
       <div className="sr-only" aria-live="polite">
         {query ? `${results.length} tools found` : ""}
       </div>

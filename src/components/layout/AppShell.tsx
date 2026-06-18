@@ -1,19 +1,35 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { BackgroundDecor } from "./BackgroundDecor";
 import { LogoLockup } from "../common/Logo";
+import { ToolIcon } from "../common/ToolIcon";
+import { categories } from "../../tools/registry";
 
 type BeforeInstallPromptEvent = Event & {
   prompt: () => Promise<void>;
   userChoice: Promise<{ outcome: "accepted" | "dismissed"; platform: string }>;
 };
 
+const categoryIcons = {
+  PDF: "merge",
+  Image: "compress",
+  Text: "word",
+  Calculate: "percent",
+  Create: "qr",
+  Productivity: "notes",
+  Developer: "json",
+  Privacy: "privacy"
+};
+
 export function AppShell({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState(() => localStorage.getItem("toolzi:theme") ?? "light");
+  const [theme, setTheme] = useState(() => localStorage.getItem("toolzi:theme") ?? "dark");
   const [menuOpen, setMenuOpen] = useState(false);
+  const [toolsOpen, setToolsOpen] = useState(false);
   const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [appInstalled, setAppInstalled] = useState(false);
   const location = useLocation();
+  const headerRef = useRef<HTMLElement | null>(null);
+  const toolsMenuRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
@@ -22,11 +38,38 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     setMenuOpen(false);
+    setToolsOpen(false);
   }, [location.pathname, location.hash]);
+
+  useEffect(() => {
+    if (!toolsOpen) return;
+
+    const closeOnOutsideClick = (event: PointerEvent) => {
+      if (!toolsMenuRef.current?.contains(event.target as Node)) {
+        setToolsOpen(false);
+      }
+    };
+
+    document.addEventListener("pointerdown", closeOnOutsideClick);
+    return () => document.removeEventListener("pointerdown", closeOnOutsideClick);
+  }, [toolsOpen]);
 
   useEffect(() => {
     document.body.classList.toggle("nav-open", menuOpen);
     return () => document.body.classList.remove("nav-open");
+  }, [menuOpen]);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+
+    const closeOnOutsideTap = (event: PointerEvent) => {
+      if (!headerRef.current?.contains(event.target as Node)) {
+        setMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("pointerdown", closeOnOutsideTap);
+    return () => document.removeEventListener("pointerdown", closeOnOutsideTap);
   }, [menuOpen]);
 
   useEffect(() => {
@@ -59,11 +102,14 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   };
 
   const canInstall = Boolean(installPrompt && !appInstalled);
+  const toolsActive =
+    location.pathname.startsWith("/tools") || categories.some((category) => location.hash === `#${category}`);
+  const privacyActive = location.hash === "#Privacy";
 
   return (
     <div className="app">
       <BackgroundDecor />
-      <header className={`site-header ${menuOpen ? "mobile-menu-open" : ""}`}>
+      <header ref={headerRef} className={`site-header ${menuOpen ? "mobile-menu-open" : ""}`}>
         <Link to="/" className="wordmark" aria-label="Toolzi home">
           <LogoLockup />
         </Link>
@@ -106,9 +152,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             aria-controls="site-menu"
             onClick={() => setMenuOpen((open) => !open)}
           >
-            <span aria-hidden="true" />
-            <span aria-hidden="true" />
-            <span aria-hidden="true" />
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 6h16" />
+              <path d="M4 12h16" />
+              <path d="M4 18h16" />
+            </svg>
           </button>
         </div>
         <button className="nav-scrim" type="button" aria-label="Dismiss menu" onClick={() => setMenuOpen(false)} />
@@ -120,15 +168,33 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </button>
           </div>
           <nav className="nav-links" aria-label="Main navigation">
-            <NavLink to="/">Home</NavLink>
-            <NavLink to="/tools">Tools</NavLink>
-            <a href="/#PDF">PDF</a>
-            <a href="/#Image">Images</a>
-            <a href="/#Text">Text</a>
-            <a href="/#Calculate">Calculate</a>
-            <a href="/#Create">Create</a>
-            <a href="/#Developer">Developer</a>
-            <a href="/#Privacy">Privacy</a>
+            <NavLink to="/" end>
+              Home
+            </NavLink>
+            <div className="nav-dropdown" ref={toolsMenuRef}>
+              <button
+                className={`nav-dropdown-trigger ${toolsActive && !privacyActive ? "active" : ""}`}
+                type="button"
+                aria-expanded={toolsOpen}
+                aria-controls="tools-menu"
+                onClick={() => setToolsOpen((open) => !open)}
+              >
+                Tools <span aria-hidden="true">▾</span>
+              </button>
+              {toolsOpen && (
+                <div className="tools-dropdown" id="tools-menu">
+                  {categories.map((category) => (
+                    <a key={category} href={`/#${category}`} onClick={() => setToolsOpen(false)}>
+                      <ToolIcon name={categoryIcons[category]} category={category} />
+                      <span>{category === "Calculate" ? "Calculators" : category}</span>
+                    </a>
+                  ))}
+                </div>
+              )}
+            </div>
+            <a className={privacyActive ? "active" : ""} href="/#Privacy">
+              Privacy
+            </a>
           </nav>
         </div>
       </header>
