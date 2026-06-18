@@ -1,11 +1,14 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import { BrowserRouter } from "react-router-dom";
-import App from "./app/App";
-import "./styles/globals.css";
-import "./styles/print.css";
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { BrowserRouter } from 'react-router-dom';
+import App from './app/App';
+import { initializeClarity } from './lib/clarity';
+import './styles/globals.css';
+import './styles/print.css';
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
+initializeClarity();
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <BrowserRouter>
       <App />
@@ -13,9 +16,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   </React.StrictMode>
 );
 
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("/sw.js").catch(() => {
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch(() => {
       // Toolzi still works without offline install support.
     });
   });
