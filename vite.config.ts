@@ -3,6 +3,7 @@ import { fileURLToPath, URL } from 'node:url';
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 import compression from 'vite-plugin-compression';
+import { VitePWA } from 'vite-plugin-pwa';
 
 const toolCategories = [
   'pdf',
@@ -18,6 +19,26 @@ const toolCategories = [
 export default defineConfig({
   plugins: [
     react(),
+    VitePWA({
+      registerType: 'autoUpdate',
+      injectRegister: 'script-defer',
+      manifest: false,
+      includeAssets: ['manifest.webmanifest', 'favicon.svg', 'icon-192.png', 'icon-512.png'],
+      workbox: {
+        navigateFallback: '/index.html',
+        runtimeCaching: [
+          {
+            urlPattern: ({ request }) => request.mode === 'navigate',
+            handler: 'NetworkFirst',
+          },
+          {
+            urlPattern: ({ request }) =>
+              ['style', 'script', 'worker', 'image', 'font'].includes(request.destination),
+            handler: 'CacheFirst',
+          },
+        ],
+      },
+    }),
     compression({
       algorithm: 'brotliCompress',
       ext: '.br',
