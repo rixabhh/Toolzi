@@ -2,10 +2,15 @@ export type ToolCategory = "PDF" | "Image" | "Text" | "Calculate" | "Create" | "
 
 export type Tool = {
   id: string;
+  slug: string;
   name: string;
   category: ToolCategory;
   description: string;
+  longDescription: string;
+  howItWorks: string[];
+  faqs: { question: string; answer: string }[];
   route: string;
+  legacyRoute: string;
   privacy: "local";
   popular?: boolean;
   keywords: string[];
@@ -26,20 +31,92 @@ const t = (
   aliases: string[],
   intents: string[],
   related: string[]
-): Tool => ({
-  id,
-  name,
-  category,
-  description,
-  route: `/tools/${id}`,
-  privacy: "local",
-  popular,
-  keywords,
-  aliases,
-  intents,
-  icon,
-  related
-});
+): Tool => {
+  const slug = canonicalToolSlug(id);
+  const route = `/${categorySlug(category)}/${slug}`;
+  const content = createToolContent(name, category, description, keywords, aliases);
+
+  return {
+    id,
+    slug,
+    name,
+    category,
+    description,
+    ...content,
+    route,
+    legacyRoute: `/tools/${id}`,
+    privacy: "local",
+    popular,
+    keywords,
+    aliases,
+    intents,
+    icon,
+    related
+  };
+};
+
+export function categorySlug(category: ToolCategory) {
+  return category.toLowerCase();
+}
+
+const canonicalSlugOverrides: Record<string, string> = {
+  "merge-pdf": "merge",
+  "split-pdf": "split",
+  "image-compressor": "compress",
+  "image-resizer": "resize",
+  "image-converter": "convert",
+  "word-counter": "word-counter",
+  "qr-code-generator": "qr-code-generator",
+  "gst-calculator": "gst-calculator"
+};
+
+export function canonicalToolSlug(id: string) {
+  return canonicalSlugOverrides[id] ?? id;
+}
+
+function createToolContent(
+  name: string,
+  category: ToolCategory,
+  description: string,
+  keywords: string[],
+  aliases: string[]
+) {
+  const categoryName = category === "Calculate" ? "calculator" : `${category.toLowerCase()} tool`;
+  const primaryKeyword = keywords[0] ?? name.toLowerCase();
+  const secondaryKeywords = [...keywords.slice(1, 4), ...aliases.slice(0, 2)].slice(0, 4);
+  const keywordSentence =
+    secondaryKeywords.length > 0
+      ? `It is built for searches like ${primaryKeyword}, ${secondaryKeywords.join(", ")}, and similar everyday needs.`
+      : `It is built for ${primaryKeyword} and similar everyday needs.`;
+  const privacyAnswer =
+    category === "PDF" || category === "Image" || category === "Privacy"
+      ? `No. ${name} runs in your browser, so your files and sensitive data never leave your device.`
+      : `No. ${name} works locally in your browser, so the text or values you enter stay on your device.`;
+
+  return {
+    longDescription: `${name} is a free browser-based ${categoryName} for people who want quick results without uploading files or creating an account. ${description} ${keywordSentence} Everything runs locally in your browser, which keeps the workflow fast and private.`,
+    howItWorks: [
+      `Open ${name} and add the file, text, link, or values you want to work with.`,
+      `Use the ${primaryKeyword} options to prepare the result and preview changes directly in the browser.`,
+      "Download, copy, or use the finished result without sending your data to a server."
+    ],
+    faqs: [
+      {
+        question: `Does ${name} upload my files or data?`,
+        answer: privacyAnswer
+      },
+      {
+        question: `Is ${name} free to use?`,
+        answer: `Yes. ${name} is free and does not require sign-up.`
+      },
+      {
+        question: `Is there a limit for ${name}?`,
+        answer:
+          "There is no server-side limit. The practical limit depends on your browser, device memory, and the size of the files or text you use."
+      }
+    ]
+  };
+}
 
 export const tools: Tool[] = [
   t("markdown-to-pdf", "Markdown to PDF", "PDF", "Paste Markdown or ChatGPT output and turn it into a clean printable PDF.", "markdown", false, ["markdown to pdf", "md to pdf", "chatgpt to pdf", "claude to pdf", "notes to pdf", "report pdf"], ["paste2pdf", "markdown pdf maker", "chatgpt pdf"], ["make pdf", "convert markdown", "paste to pdf", "save notes as pdf"], ["word-counter", "text-cleaner", "image-to-pdf", "merge-pdf"]),
@@ -97,8 +174,48 @@ export const categoryCopy: Record<ToolCategory, string> = {
   Privacy: "Generate and inspect sensitive data locally."
 };
 
+export const categoryLongCopy: Record<ToolCategory, string> = {
+  PDF:
+    "Use Toolzi PDF tools to merge, split, create, and convert PDF files directly in your browser. Local processing means your documents stay on your device instead of being uploaded to a third-party server.",
+  Image:
+    "Compress, resize, convert, and clean up images with browser-based image tools. Toolzi keeps your images local, which is useful for private photos, work assets, and fast one-off edits.",
+  Text:
+    "Toolzi text tools help you count, clean, and reshape copied text without extra software. Because everything runs in the browser, drafts, notes, and pasted content stay on your device.",
+  Calculate:
+    "Use quick calculators for GST, percentages, age, dates, BMI, units, and loan payments. These tools run instantly in your browser and do not require accounts or server-side processing.",
+  Create:
+    "Create QR codes, invoices, signatures, favicons, and simple graphics from your browser. Toolzi keeps the generation process local where possible so your inputs remain private.",
+  Productivity:
+    "Toolzi productivity tools cover notes, tasks, focus sessions, and timers for everyday work. Your notes and task lists are saved locally in this browser rather than in a cloud account.",
+  Developer:
+    "Format, convert, encode, inspect, and compare developer data without leaving the browser. Toolzi developer tools are built for quick local checks with no pasted data sent to a server.",
+  Privacy:
+    "Generate passwords, check password strength, and calculate file hashes with privacy-first browser tools. Sensitive inputs stay local, which is the whole point of this category."
+};
+
+export const categoryReasons: Record<ToolCategory, string[]> = {
+  PDF: ["Documents stay on your device.", "No account is required for quick PDF fixes.", "Common PDF workflows are grouped in one place."],
+  Image: ["Private images are processed locally.", "Common formats and size changes are quick to preview.", "Downloads are ready immediately after processing."],
+  Text: ["Pasted text stays in your browser.", "Clean-up tools are fast for repeated writing tasks.", "Counts and conversions update without upload delays."],
+  Calculate: ["Calculations run instantly in the browser.", "Everyday formulas are available without spreadsheets.", "Inputs are not stored on a server."],
+  Create: ["Generated assets are ready to download.", "Useful formats are built for sharing and printing.", "Most inputs stay local to your browser."],
+  Productivity: ["Notes and tasks stay in this browser.", "Timers and lists work without sign-up.", "Small workflows stay focused and lightweight."],
+  Developer: ["Pasted code and data stay local.", "Formatting and conversion tools are available together.", "Quick checks do not need a backend service."],
+  Privacy: ["Sensitive values stay on your device.", "Password and hash tools run locally.", "No account or upload is required."]
+};
+
 export function getToolById(id: string) {
   return tools.find((tool) => tool.id === id);
+}
+
+export function getToolByCategoryAndSlug(category: string, slug: string) {
+  return tools.find(
+    (tool) => categorySlug(tool.category) === category.toLowerCase() && tool.slug === slug
+  );
+}
+
+export function getCategoryBySlug(slug: string) {
+  return categories.find((category) => categorySlug(category) === slug.toLowerCase());
 }
 
 export function getRelatedTools(ids: string[]) {

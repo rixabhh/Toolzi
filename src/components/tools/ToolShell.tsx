@@ -7,6 +7,46 @@ import { Badge } from "../common/Badge";
 import { ToolIcon } from "../common/ToolIcon";
 import { ToolCard } from "../home/ToolCard";
 
+function ToolPageContent({ tool }: { tool: Tool }) {
+  return (
+    <section className="tool-page-content section-block">
+      <div className="section-heading">
+        <h2>How it works</h2>
+      </div>
+      <ol className="content-list ordered">
+        {tool.howItWorks.map((step) => (
+          <li key={step}>{step}</li>
+        ))}
+      </ol>
+
+      <div className="section-heading">
+        <h2>Frequently asked questions</h2>
+      </div>
+      <div className="faq-list">
+        {tool.faqs.map((faq) => (
+          <article key={faq.question}>
+            <h3>{faq.question}</h3>
+            <p>{faq.answer}</p>
+          </article>
+        ))}
+      </div>
+
+      <div className="section-heading">
+        <h2>About {tool.name}</h2>
+      </div>
+      <p className="tool-long-description">{tool.longDescription}</p>
+
+      <div className="section-heading">
+        <h2>Common uses</h2>
+        <p>
+          People use {tool.name} for {tool.keywords.slice(0, 4).join(", ")} and related tasks like{" "}
+          {[...tool.aliases, ...tool.intents].slice(0, 4).join(", ")}.
+        </p>
+      </div>
+    </section>
+  );
+}
+
 export function ToolShell({ tool, children }: { tool: Tool; children: React.ReactNode }) {
   const { isFavorite, toggleFavorite } = useFavorites();
   const favorite = isFavorite(tool.id);
@@ -45,6 +85,7 @@ export function ToolShell({ tool, children }: { tool: Tool; children: React.Reac
         </button>
       </header>
       {children}
+      <ToolPageContent tool={tool} />
       <section className="section-block">
         <div className="section-heading">
           <h2>Related tools</h2>

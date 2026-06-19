@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build --mode ssg --configLoader runner && vite build --mode ssg --configLoader runner --ssr src/entry-server.tsx --outDir dist/server --emptyOutDir false && node scripts/prerender.mjs",
+    "generate:og": "node scripts/generate-og-images.js",
     "preview": "vite preview",
     "deploy": "npm run build && wrangler deploy",
     "test": "vitest run --config vitest.config.ts",

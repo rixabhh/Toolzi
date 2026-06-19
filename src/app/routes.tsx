@@ -1,8 +1,7 @@
-import { lazy, useEffect } from "react";
+import { lazy } from "react";
 import { useParams } from "react-router-dom";
-import { getToolById } from "../tools/registry";
+import { getToolByCategoryAndSlug, getToolById } from "../tools/registry";
 import { ToolShell } from "../components/tools/ToolShell";
-import { setSeo } from "../lib/seo";
 
 const MarkdownToPDF = lazy(() => import("../tools/pdf/MarkdownToPDF").then((m) => ({ default: m.MarkdownToPDF })));
 const MergePDF = lazy(() => import("../tools/pdf/MergePDF").then((m) => ({ default: m.MergePDF })));
@@ -89,24 +88,9 @@ const toolViews: Record<string, React.ComponentType> = {
 };
 
 export function ToolRoute() {
-  const { toolId = "" } = useParams();
-  const tool = getToolById(toolId);
-  const Component = toolViews[toolId];
-
-  useEffect(() => {
-    if (tool) {
-      setSeo({
-        title: `${tool.name} - Free local ${tool.category.toLowerCase()} tool | Toolzi`,
-        description: `${tool.description} Runs locally in your browser so your files and data stay on your device.`,
-        path: tool.route,
-        keywords: [...tool.keywords, ...tool.aliases, "Toolzi", "local browser tool", "privacy-first tool"]
-      });
-    }
-
-    return () => {
-      setSeo();
-    };
-  }, [tool]);
+  const { categorySlug = "", toolId = "", toolSlug = "" } = useParams();
+  const tool = toolId ? getToolById(toolId) : getToolByCategoryAndSlug(categorySlug, toolSlug);
+  const Component = tool ? toolViews[tool.id] : undefined;
 
   if (!tool || !Component) {
     return <div className="neu-card empty-state">Couldn&apos;t find that tool yet. Try the search on the homepage.</div>;

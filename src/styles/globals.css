@@ -2295,3 +2295,51 @@ p {
     animation: none !important;
   }
 }
+
+.tool-page-content {
+  margin-top: 34px;
+  color: var(--muted);
+}
+
+.content-list {
+  margin: 0;
+  padding-left: 1.1rem;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.content-list.ordered {
+  padding-left: 1.35rem;
+}
+
+.faq-list {
+  display: grid;
+  gap: 18px;
+}
+
+.faq-list article {
+  display: grid;
+  gap: 6px;
+}
+
+.faq-list h3 {
+  margin: 0;
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: 1rem;
+}
+
+.faq-list p,
+.tool-long-description {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.hero-link {
+  display: inline-flex;
+  width: fit-content;
+  margin-top: 10px;
+  color: var(--text);
+  font-weight: 800;
+}

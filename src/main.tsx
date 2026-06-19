@@ -1,7 +1,7 @@
 import { initializeSentry, trackPageLoadTime } from './instrument';
 import React from 'react';
 import * as Sentry from '@sentry/react';
-import ReactDOM from 'react-dom/client';
+import { createRoot, hydrateRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import App from './app/App';
 import { initializeClarity } from './lib/clarity';
@@ -17,17 +17,25 @@ if (document.readyState === 'complete') {
   window.addEventListener('load', trackPageLoadTime, { once: true });
 }
 
-ReactDOM.createRoot(document.getElementById('root')!, {
+const rootElement = document.getElementById('root')!;
+const rootOptions = {
   onUncaughtError: Sentry.reactErrorHandler(),
   onCaughtError: Sentry.reactErrorHandler(),
   onRecoverableError: Sentry.reactErrorHandler(),
-}).render(
+};
+const app = (
   <React.StrictMode>
     <BrowserRouter>
       <App />
     </BrowserRouter>
   </React.StrictMode>
 );
+
+if (rootElement.hasChildNodes()) {
+  hydrateRoot(rootElement, app, rootOptions);
+} else {
+  createRoot(rootElement, rootOptions).render(app);
+}
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {

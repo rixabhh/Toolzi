@@ -22,6 +22,7 @@ export default defineConfig(({ mode }) => {
   const enableSentrySourceMaps = Boolean(
     env.SENTRY_ORG && env.SENTRY_PROJECT && env.SENTRY_AUTH_TOKEN
   );
+  const disableGeneratedPwa = mode === 'ssg';
 
   return {
     define: {
@@ -31,6 +32,7 @@ export default defineConfig(({ mode }) => {
     plugins: [
       react(),
       VitePWA({
+        disable: disableGeneratedPwa,
         registerType: 'autoUpdate',
         injectRegister: 'script-defer',
         manifest: false,
@@ -50,10 +52,11 @@ export default defineConfig(({ mode }) => {
           ],
         },
       }),
-      compression({
-        algorithm: 'brotliCompress',
-        ext: '.br',
-      }),
+      !disableGeneratedPwa &&
+        compression({
+          algorithm: 'brotliCompress',
+          ext: '.br',
+        }),
       sentryVitePlugin({
         org: env.SENTRY_ORG,
         project: env.SENTRY_PROJECT,

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { BackgroundDecor } from "./BackgroundDecor";
 import { LogoLockup } from "../common/Logo";
+import { SEOHead } from "../common/SEOHead";
 import { ToolIcon } from "../common/ToolIcon";
 import { categories } from "../../tools/registry";
 
@@ -22,7 +23,9 @@ const categoryIcons = {
 };
 
 export function AppShell({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState(() => localStorage.getItem("toolzi:theme") ?? "dark");
+  const [theme, setTheme] = useState(() =>
+    typeof window === "undefined" ? "dark" : localStorage.getItem("toolzi:theme") ?? "dark"
+  );
   const [menuOpen, setMenuOpen] = useState(false);
   const [toolsOpen, setToolsOpen] = useState(false);
   const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
@@ -108,6 +111,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="app">
+      <SEOHead />
       <BackgroundDecor />
       <header ref={headerRef} className={`site-header ${menuOpen ? "mobile-menu-open" : ""}`}>
         <Link to="/" className="wordmark" aria-label="Toolzi home">
